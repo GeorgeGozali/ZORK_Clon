@@ -12,7 +12,7 @@ class Map:
 #     pass
 
 
-class User(Map):
+class Player(Map):
     _health = 100
     current_location = map_dict.get("West Of House")
 
@@ -35,15 +35,17 @@ class User(Map):
             print(new_direction)
 
 
-u = User()
+player = Player()
 
 while True:
     user_input = input(">")
     if user_input == "q":
-        break
+        user_input = input("Are you sure you want to quit? ")
+        while user_input.lower() not in ("y", "yes", "n", "no"):
+            user_input = input("Please answer yes or no.>")
     elif user_input == "look":
-        print(u.current_location.get("place"))
-        print(u.current_location.get("description"), "\n")
+        print(player.current_location.get("place"))
+        print(player.current_location.get("description"), "\n")
     elif user_input in ("n", "s", "e", "w", "ne", "nw", "se", "sw"):
-        u.move(user_input)
-        print(u.current_location['place'], "\n")
+        player.move(user_input)
+        print(player.current_location['place'], "\n")
