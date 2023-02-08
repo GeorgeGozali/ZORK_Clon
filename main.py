@@ -65,6 +65,7 @@ class Player():
 
     def __init__(self, location=START_LOCATION):
         self.location = location
+        self.inventory = []
 
     @property
     def health(self):
@@ -73,6 +74,17 @@ class Player():
     @health.setter
     def health(self, new_value: int) -> None:
         self._health = new_value
+
+    def pick_up(self, current_room, item=None):
+        if not item:
+            return "What do you want to pick up?"
+        elif item in current_room.items and item not in self.inventory:
+            self.inventory.append(item)
+            return "Taken."
+        elif item in self.inventory:
+            return "You already have that."
+        else:
+            "You can't see any such thing."
 
     def move(self, direction):
         print(map.__dict__)
@@ -86,11 +98,6 @@ class Player():
         #         print(new_direction, "\n")
         # else:
         #     print("You can't go that way.\n")
-
-    # TODO change so it no longer uses class attributes but map/room objects
-    def look(self):
-        print(self.__dict__.get("place"))
-        print(self.__dict__.get("description"), "\n")
 
 
 player = Player()
@@ -115,8 +122,10 @@ def run():
                 print("You can't go that way.\n")
         elif user_input.startswith("look") and user_input[-1] in DIRECTIONS:
             print(map.look_direction(current_room, user_input[-1]), "\n")
-
+        elif user_input.startswith("get"):
+            print(player.pick_up())
         else:
+            print(user_input)
             print("That's not a verb I recognise.\n")
 
     # current_room = map.get(current_room.get_north())
