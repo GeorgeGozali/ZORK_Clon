@@ -6,11 +6,12 @@ DIRECTIONS = ["n", "s", "e", "w", "ne", "nw", "se", "sw"]
 
 
 class Place:
-    def __init__(self, place, description, exits, items):
+    def __init__(self, place, description, exits, items, required_items):
         self.place = place
         self.description = description
         self.exits = exits
         self.items = items
+        self.required_items = None
         # self.north = exits["n"]
         # self.south = exits["s"]
         # self.east = exits["e"]
@@ -63,6 +64,7 @@ class Map(Place):
 
 class Player():
     _health = DEFAULT_HEALTH
+    current_room: Place = None
 
     def __init__(self, location=START_LOCATION):
         self.location = location
@@ -76,38 +78,26 @@ class Player():
     def health(self, new_value: int) -> None:
         self._health = new_value
 
-    def pick_up(self, current_room, item=None):
+    def pick_up(self, item=None):
         if not item:
             return "What do you want to pick up?"
-        elif item not in current_room.items:
+        elif item not in self.current_room.items:
             return "You can't see any such thing."
-        elif item in current_room.items and item not in self.inventory:
+        elif item in self.current_room.items and item not in self.inventory:
             self.inventory.append(item)
             return "Taken."
         else:
             return "You already have that."
 
-    def move(self, direction):
-        print(map.__dict__)
-        # new_direction = map.
-        # if new_direction:
-        #     self.current_location = map_dict.get(new_direction)
-        #     if self.current_location:
-        #         self.update(new_location=new_direction)
-        #         self.look()
-        #     else:
-        #         print(new_direction, "\n")
-        # else:
-        #     print("You can't go that way.\n")
-
-
-player = Player()
+    def open(self, current_):
+        pass
 
 
 def run():
-    player = Player()
     map = Map()
-    current_room: Place = map.get_place(player.location)
+    current_room: Place = map.get_place(START_LOCATION)
+    player = Player()
+    player.current_room = current_room
 
     while True:
         user_input = input(">")
@@ -123,6 +113,7 @@ def run():
             direction = map.get_place(current_room.exits.get(user_input))
             if isinstance(direction, Place):
                 current_room = direction
+                player.current_room = current_room
             if direction:
                 print(direction, "\n")
             else:
@@ -130,7 +121,7 @@ def run():
         elif user_input.startswith("look") and user_input[-1] in DIRECTIONS:
             print(map.look_direction(current_room, user_input[-1]), "\n")
         elif user_input.startswith("get"):
-            print(player.pick_up(current_room, user_input.split(" ")[1]))
+            print(player.pick_up(user_input.split(" ")[1]))
         elif user_input == "bag":
             print(player.inventory)
         else:
