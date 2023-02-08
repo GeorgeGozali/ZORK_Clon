@@ -6,10 +6,11 @@ DIRECTIONS = ["n", "s", "e", "w", "ne", "nw", "se", "sw"]
 
 
 class Place:
-    def __init__(self, place, description, exits):
+    def __init__(self, place, description, exits, items):
         self.place = place
         self.description = description
         self.exits = exits
+        self.items = items
         # self.north = exits["n"]
         # self.south = exits["s"]
         # self.east = exits["e"]
@@ -51,13 +52,13 @@ class Map(Place):
     def look_direction(self, current_room, direction):
         return current_room.exits.get(direction)
 
-
     def look(self, current_room):
         print(current_room.place)
-        print(current_room.description, "\n")
-
-    # def get(self, place_name):
-    #     return self.map_dict.get(place_name)
+        print(current_room.description)
+        if current_room.items:
+            print(current_room.items, "\n")
+        else:
+            print()
 
 
 class Player():
@@ -78,13 +79,13 @@ class Player():
     def pick_up(self, current_room, item=None):
         if not item:
             return "What do you want to pick up?"
+        elif item not in current_room.items:
+            return "You can't see any such thing."
         elif item in current_room.items and item not in self.inventory:
             self.inventory.append(item)
             return "Taken."
-        elif item in self.inventory:
-            return "You already have that."
         else:
-            "You can't see any such thing."
+            return "You already have that."
 
     def move(self, direction):
         print(map.__dict__)
@@ -110,7 +111,13 @@ def run():
 
     while True:
         user_input = input(">")
-        if user_input == "look":
+        if user_input == "q":
+            user_input = input("Are you sure you want to quit? ")
+            while user_input.lower() not in ("y", "yes", "n", "no"):
+                user_input = input("Please answer yes or no.>")
+            if user_input.lower() in ("y", "yes"):
+                break
+        elif user_input == "look":
             map.look(current_room)
         elif user_input in DIRECTIONS:
             direction = map.get_place(current_room.exits.get(user_input))
@@ -123,25 +130,15 @@ def run():
         elif user_input.startswith("look") and user_input[-1] in DIRECTIONS:
             print(map.look_direction(current_room, user_input[-1]), "\n")
         elif user_input.startswith("get"):
-            print(player.pick_up())
+            print(player.pick_up(current_room, user_input.split(" ")[1]))
+        elif user_input == "bag":
+            print(player.inventory)
         else:
             print(user_input)
             print("That's not a verb I recognise.\n")
 
     # current_room = map.get(current_room.get_north())
     # current_room.get_south()
-    # while True:
-    #     user_input = input(">")
-    #     if user_input == "q":
-    #         user_input = input("Are you sure you want to quit? ")
-    #         while user_input.lower() not in ("y", "yes", "n", "no"):
-    #             user_input = input("Please answer yes or no.>")
-    #         if user_input.lower() in ("y", "yes"):
-    #             break
-    #     elif user_input == "look":
-    #         player.look()
-    #     elif user_input in ("n", "s", "e", "w", "ne", "nw", "se", "sw"):
-    #         player.move(user_input)
 
 
 if __name__ == '__main__':
