@@ -2,6 +2,7 @@ import json
 
 DEFAULT_HEALTH = 100
 START_LOCATION = "West Of House"
+DIRECTIONS = ["n", "s", "e", "w", "ne", "nw", "se", "sw"]
 
 
 class Place:
@@ -41,26 +42,22 @@ class Map(Place):
         with open("map.json", "r") as f:
             self.map_dict = json.load(f)
 
-    def get_place(self, place_name=START_LOCATION):
-        # TODO return Place object for this room
-        # something like return Place(**self.map_dict.get(place_name)
-        return Place(**self.map_dict.get(place_name))
-
-    def get_direction(self, direction):
-        if direction == "":
-            print("You can't go that way.")
-        elif self.map_dict.get(direction):
-            print(direction)
-            return self.get_place(direction)
+    def get_place(self, place_name):
+        if self.map_dict.get(place_name):
+            return Place(**self.map_dict.get(place_name))
         else:
-            print(direction)
+            return place_name
+
+    def look_direction(self, current_room, direction):
+        return current_room.exits.get(direction)
+
 
     def look(self, current_room):
         print(current_room.place)
-        print(current_room.description)
+        print(current_room.description, "\n")
 
-    def get(self, place_name):
-        return self.map_dict.get(place_name)
+    # def get(self, place_name):
+    #     return self.map_dict.get(place_name)
 
 
 class Player():
@@ -102,27 +99,28 @@ player = Player()
 def run():
     player = Player()
     map = Map()
-    current_room: Place = map.get_place()
-    # map.look(current_room)
-    # print(map.get_direction(current_room.exits.get("n")))
-    # print(map.get_direction(current_room.exits.get("e")))
-    # print(map.get_direction(current_room.exits.get("nw")))
+    current_room: Place = map.get_place(player.location)
 
-    # print(map.place())
     while True:
         user_input = input(">")
         if user_input == "look":
             map.look(current_room)
-        elif user_input in ("n", "s", "e", "w", "ne", "nw", "se", "sw"):
-            if map.get_direction(current_room.exits.get(user_input)):
-                current_room = map.get_direction(current_room.exits.get(user_input))
+        elif user_input in DIRECTIONS:
+            direction = map.get_place(current_room.exits.get(user_input))
+            if isinstance(direction, Place):
+                current_room = direction
+            if direction:
+                print(direction, "\n")
             else:
-                map.get_direction(current_room.exits.get(user_input))
+                print("You can't go that way.\n")
+        elif user_input.startswith("look") and user_input[-1] in DIRECTIONS:
+            print(map.look_direction(current_room, user_input[-1]), "\n")
+
+        else:
+            print("That's not a verb I recognise.\n")
 
     # current_room = map.get(current_room.get_north())
     # current_room.get_south()
-
-
     # while True:
     #     user_input = input(">")
     #     if user_input == "q":
