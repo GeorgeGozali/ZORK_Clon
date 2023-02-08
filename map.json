@@ -1,4 +1,4 @@
-map_dict = {
+{
     "West Of House": {
         "place": "West Of House",
         "description": "This is an open field west of a white house, with a boarded front door.",
@@ -7,10 +7,10 @@ map_dict = {
             "s": "South Of House",
             "e": "The door is locked, and there is evidently no key.",
             "w": "Forest",
-            "ne": None,
-            "nw": None,
-            "se": None,
-            "sw": None
+            "ne": "",
+            "nw": "",
+            "se": "",
+            "sw": ""
         }
     },
     "North Of House": {
@@ -21,10 +21,10 @@ map_dict = {
             "s": "West Of House",
             "e": "Behind House",
             "w": "West Of House",
-            "ne": None,
-            "nw": None,
-            "se": None,
-            "sw": None
+            "ne": "",
+            "nw": "",
+            "se": "",
+            "sw": ""
         }
     },
     "South Of House": {
@@ -35,10 +35,10 @@ map_dict = {
             "s": "Forest 3",
             "e": "Behind House",
             "w": "West Of House",
-            "ne": None,
-            "nw": None,
-            "se": None,
-            "sw": None
+            "ne": "",
+            "nw": "",
+            "se": "",
+            "sw": ""
         }
     },
     "Behind House": {
@@ -49,14 +49,24 @@ map_dict = {
             "w": "The window is closed.",
             "s": "South Of House",
             "e": "Clearing",
-            "ne": None,
-            "nw": None,
-            "se": None,
-            "sw": None
-
+            "ne": "",
+            "nw": "",
+            "se": "",
+            "sw": ""
         }
     },
     "Clearing": {
         "place": "Clearing",
-        "description": "You are in a clearing, with a forest surrounding you on the west and south.",
+        "description": "You are in a clearing, with a forest surrounding you on the west and south. \nThere is a pile of leaves on the ground.",
+        "exits": {
+            "w": "Forest",
+            "e" : "Clearing",
+            "n": "Clearing",
+            "s": "Forest",
+            "ne": "",
+            "nw": "",
+            "se": "Forest",
+            "sw": "Behind House"
+        }
+    }
 }
