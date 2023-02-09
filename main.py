@@ -25,7 +25,6 @@ def run():
             direction = map.get_place(current_room.exits.get(user_input))
             if isinstance(direction, Place):
                 current_room = direction
-                player.current_room = current_room # TODO fix
             if direction:
                 print(direction, "\n")
             else:
@@ -36,10 +35,10 @@ def run():
         elif user_input.startswith("get"):
             try:
                 item = user_input.strip().split(" ")[1]
-                if item in current_room.items: # TODO use method instead
+                if current_room.check_item(item):
                     print(player.pick_up(item))
-                    current_room.items.remove(item) # TODO use method instead
-                elif item in player.inventory: # TODO use method instead
+                    current_room.remove_item(item)
+                elif player.check_inventory(item):
                     print("You already have that.\n")
                 else:
                     print("You can't see any such thing.\n")
@@ -47,7 +46,7 @@ def run():
                 print("What do you want to get?\n")
 
         elif user_input == "bag":
-            print(player.inventory)
+            print(player.list_items())
         elif user_input.startswith("open"):
             pass
         else:

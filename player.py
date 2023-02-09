@@ -16,11 +16,17 @@ class Player:
     def health(self, new_value: int) -> None:
         self._health = new_value
 
-    # TODO create method to check if item is in inventory
+    def check_inventory(self, item: str) -> bool:
+        if item in self.inventory:
+            return True
+        return False
 
-    def pick_up(self, item):
+    def pick_up(self, item: str) -> str:
         self.inventory.append(item)
         return "Taken"
+
+    def list_items(self) -> list:
+        return self.inventory
 
     def open(self):
         pass

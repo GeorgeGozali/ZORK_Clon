@@ -14,12 +14,19 @@ class Place:
         # self.southeast = exits["se"]
         # self.southwest = exits["sw"]
 
-    # TODO create method to check if item is in the room
+    def check_item(self, item: str) -> bool:
+        if item.strip() in self.items:
+            return True
+        return False
 
     def remove_item(self, item: str) -> None:
         self.items.remove(item)
 
-    # TODO "enter" method that returns True if the player can enter this room
+    def can_enter(self) -> bool:
+        if self.required_items is None:
+            return True
+        else:
+            return False
 
     def __str__(self):
         return self.place
